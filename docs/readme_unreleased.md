@@ -17,6 +17,8 @@ An arbitrary-precision integer and decimal mathematics library for [Mojo](https:
 
 DeciMojo provides an arbitrary-precision integer and decimal mathematics library for Mojo, delivering exact calculations for financial modeling, scientific computing, and applications where floating-point approximation errors are unacceptable. Beyond basic arithmetic, the library includes advanced mathematical functions with guaranteed precision.
 
+For Pythonistas, you can think of DeciMojo as a Mojo-native implementation of Python's `int` and `decimal.Decimal` types, designed to be a drop-in replacement for these types in Mojo. It offers similar semantics and precision guarantees as Python's built-in types, while being optimized for performance in the Mojo ecosystem. The library depends only on Mojo's standard library, and no external dependencies are required.
+
 The core types are:
 
 - A base-2 arbitrary-precision signed integer type (`BigInt2`) using a little-endian representation with `UInt32` words[^bigint2]. It is a drop-in replacement for Python's `int` in Mojo. It features comprehensive arithmetic operations, comparison functions, and supports extremely large integer calculations efficiently. It beats Python's `int` in most tested cases.
@@ -27,13 +29,11 @@ The auxiliary types include a base-10 arbitrary-precision signed integer type (`
 
 This repository includes [TOMLMojo](./docs/readme_tomlmojo.md), a lightweight TOML parser in pure Mojo. It parses configuration files and test data, supporting basic types, arrays, and nested tables. While created for DeciMojo's testing framework, it offers general-purpose structured data parsing with a clean, simple API.
 
-| type         | alias             | information                                     | internal representation  |
-| ------------ | ----------------- | ----------------------------------------------- | ------------------------ |
-| `BigInt2`    |                   | 2^32-based arbitrary-precision integer          | `List[UInt32]`, `Bool`   |
-| `BigDecimal` | `BDec`, `Decimal` | 10^9-based arbitrary-precision decimal          | `BigUInt`, `Int`, `Bool` |
-| `Decimal128` | `Dec128`          | 128-bit fixed-precision decimal                 | `UInt32` * 4             |
-| `BigUInt`    | `BUInt`           | 10^9-based arbitrary-precision unsigned integer | `List[UInt32]`           |
-| `BigInt10`   | `BInt`            | 10^9-based arbitrary-precision integer          | `BigUInt`, `Bool`        |
+| type         | alias             | information                            | internal representation  |
+| ------------ | ----------------- | -------------------------------------- | ------------------------ |
+| `BigInt2`    | `BInt`            | 2^32-based arbitrary-precision integer | `List[UInt32]`, `Bool`   |
+| `BigDecimal` | `BDec`, `Decimal` | 10^9-based arbitrary-precision decimal | `BigUInt`, `Int`, `Bool` |
+| `Decimal128` | `Dec128`          | 128-bit fixed-precision decimal        | `UInt32` * 4             |
 
 ## Installation
 
@@ -50,7 +50,7 @@ Then, you can install DeciMojo using any of these methods:
 1. In the `mojoproject.toml` file of your project, add the following dependency:
 
     ```toml
-    decimojo = "==0.7.0"
+    decimojo = "==0.8.0"
     ```
 
     Then run `pixi install` to download and install the package.
@@ -69,6 +69,7 @@ The following table summarizes the package versions and their corresponding Mojo
 | v0.5.0     | ==25.5        | pixi            |
 | v0.6.0     | ==0.25.7      | pixi            |
 | v0.7.0     | ==0.26.1      | pixi            |
+| v0.8.0     | ==0.26.2      | pixi            |
 
 ## Quick start
 

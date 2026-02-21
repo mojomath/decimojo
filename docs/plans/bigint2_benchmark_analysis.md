@@ -648,20 +648,38 @@ fn __iadd__(mut self, other: Self):
 
 ---
 
-### PR 7: GCD, Extended GCD, and Modular Arithmetic
+### PR 7: GCD, Extended GCD, and Modular Arithmetic ✅ DONE
 
 **Priority: MEDIUM** — Useful for cryptographic and number theory applications
 
-**Target:** Implement:
+**Status:** Implemented and fully tested.
 
-- `gcd(a, b)` — Binary GCD / Stein's algorithm (natural for base-2^32)
-- `extended_gcd(a, b)` → (gcd, x, y) where ax + by = gcd
-- `mod_pow(base, exp, mod)` — Modular exponentiation (Montgomery multiplication)
+**Implementation (number_theory.mojo):**
 
-**Expected Impact:**
+- `gcd(a, b)` — Binary GCD (Stein's algorithm): uses only subtraction and
+  right-shifts, natural for base-2^32 representation. Helper
+  `_count_trailing_zeros` operates at the word level for efficient power-of-2
+  factoring.
+- `extended_gcd(a, b)` → `(gcd, x, y)` — Iterative extended Euclidean
+  algorithm. Returns Bézout coefficients satisfying `a*x + b*y = gcd`.
+  Correctly handles negative inputs via sign adjustment.
+- `lcm(a, b)` — Computed as `|a| / gcd(a,b) * |b|` (divides first to keep
+  intermediates small).
+- `mod_pow(base, exp, mod)` — Right-to-left binary exponentiation with modular
+  reduction at each step. Intermediates never exceed `mod²`. Accepts both
+  `BigInt2` and `Int` exponents. Handles negative base via floor modulo.
+- `mod_inverse(a, mod)` — Modular multiplicative inverse via `extended_gcd`.
+  Returns `x` in `[0, mod)` such that `a*x ≡ 1 (mod m)`. Raises when
+  `gcd(a, mod) ≠ 1`.
 
-- Binary GCD is very efficient on base-2^32 (just shift + subtract)
-- mod_pow should be much faster than `(base ** exp) % mod`
+**Testing:** 31 tests covering:
+
+- GCD: zero/basic/negative/commutativity/powers-of-two/large-coprime/common-factor
+- Extended GCD: known coefficients, Bézout identity verification, zero/negative
+  inputs, multiple input pairs
+- LCM: basic/zero/negative, `gcd * lcm = |a*b|` property
+- mod_pow: basic/edge/Fermat's little theorem/large exponents/negative base/errors
+- mod_inverse: known inverses, roundtrip `a * inv(a) ≡ 1`, non-existence errors
 
 ---
 
@@ -699,6 +717,6 @@ sizes (100000+).
 | PR4d | to_string micro-optimizations   | ✅ **DONE** | MEDIUM      | to_string 0.97×→6.03× avg  |
 | PR5  | True in-place iadd/isub/imul    | ✅ **DONE** | MEDIUM-HIGH | perf infra, readability    |
 | PR6  | Bitwise AND/OR/XOR/NOT          | ✅ **DONE** | MEDIUM      | API completeness           |
-| PR7  | GCD + Modular Arithmetic        | TODO       | MEDIUM      | applications               |
+| PR7  | GCD + Modular Arithmetic        | ✅ **DONE** | MEDIUM      | applications               |
 | PR8  | Reassign BInt → BigInt2         | TODO       | LOW         | ergonomics                 |
 | PR9  | Toom-Cook / NTT                 | TODO       | LOW         | extreme sizes (50000+ dig) |

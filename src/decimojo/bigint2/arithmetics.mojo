@@ -1997,9 +1997,9 @@ fn right_shift_inplace(mut x: BigInt2, shift: Int):
                 ) & 0xFFFF_FFFF
             x.words[i] = UInt32(lo | hi)
 
-    # Truncate to new length
-    while len(x.words) > new_len:
-        x.words.shrink(len(x.words) - 1)
+    # Truncate to new length in a single shrink call
+    if len(x.words) > new_len:
+        x.words.shrink(new_len)
 
     # Strip leading zeros
     while len(x.words) > 1 and x.words[-1] == 0:

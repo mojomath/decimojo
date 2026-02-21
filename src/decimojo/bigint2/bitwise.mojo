@@ -221,9 +221,9 @@ fn _binary_bitwise_op_inplace[
             # We can modify a.words in-place for AND (result <= min_len)
             for i in range(min_len):
                 a.words[i] = a.words[i] & b.words[i]
-            # Truncate to min_len
-            while len(a.words) > min_len:
-                a.words.shrink(len(a.words) - 1)
+            # Truncate to min_len in a single shrink call
+            if len(a.words) > min_len:
+                a.words.shrink(min_len)
             # Strip leading zeros
             while len(a.words) > 1 and a.words[-1] == 0:
                 a.words.shrink(len(a.words) - 1)

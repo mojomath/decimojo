@@ -33,8 +33,10 @@ reassigned from BigInt10 to BigInt2, making BigInt2 the primary integer type.
 from memory import UnsafePointer, memcpy
 
 import decimojo.bigint2.arithmetics
+import decimojo.bigint2.bitwise
 import decimojo.bigint2.comparison
 import decimojo.bigint2.exponential
+import decimojo.bigint2.number_theory
 import decimojo.str
 from decimojo.bigint10.bigint10 import BigInt10
 from decimojo.biguint.biguint import BigUInt
